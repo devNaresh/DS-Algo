@@ -56,7 +56,7 @@ class AVLTree:
         newnode.height = max(height(newnode.left), height(newnode.right)) + 1
         return newnode
 
-    def insert(self, node, data):
+    def _insert(self, node, data):
         if node is None:
             node = TreeNode(data)
             if self.root is None: self.root = node
@@ -64,9 +64,9 @@ class AVLTree:
 
         else:
             if data < node.data:
-                node.left = self.insert(node.get_left(), data)
+                node.left = self._insert(node.get_left(), data)
             elif data > node.data:
-                node.right = self.insert(node.get_right(), data)
+                node.right = self._insert(node.get_right(), data)
         node_height = max(height(node.left), height(node.right)) + 1
         node.set_height(node_height)
 
@@ -112,14 +112,16 @@ class AVLTree:
         print node.data
         AVLTree.print_inorder(node.right)
 
+    def insert(self, data):
+        return self._insert(self.root, data)
+
 
 if __name__ == "__main__":
     avl = AVLTree()
-    avl.insert(avl.root, 10)
-    avl.insert(avl.root, 20)
-    avl.insert(avl.root, 30)
-    avl.insert(avl.root, 40)
-    avl.insert(avl.root, 50)
-    avl.insert(avl.root, 25)
-
+    avl.insert(10)
+    avl.insert(20)
+    avl.insert(30)
+    avl.insert(40)
+    avl.insert(50)
+    avl.insert(25)
     avl.print_inorder(avl.root)
