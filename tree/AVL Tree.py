@@ -96,7 +96,7 @@ class AVLTree:
 
         ## Right Left Case:
         if height_diff < -1 and data < node.data:
-            node.right = self.left_rotate(node.right)
+            node.right = self.right_rotate(node.right)
             new_node = self.left_rotate(node)
             if node is self.root:
                 self.root = new_node
