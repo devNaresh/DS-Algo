@@ -8,10 +8,14 @@ class PriorityQueue(Heap):
         return arr[0]
 
     def pop_max_element(self, arr):
-        max_element = arr[0]
-        arr[0] = arr.pop()
-        self.max_heapify(arr, 0, len(arr))
-        return max_element
+        min_element = arr[0]
+        last_element = arr.pop()
+        if arr:
+            arr[0] = last_element
+            self.max_heapify(arr, 0, len(arr))
+        else:
+            min_element = last_element
+        return min_element
 
     # check on web
     def insert_element(self, arr, value):
