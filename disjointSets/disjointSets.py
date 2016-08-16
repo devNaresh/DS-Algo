@@ -1,61 +1,86 @@
 __author__ = 'naresh'
 
-""" Refer below link for further assistence
+"""
+Refer below link for further assistence
 
-https://www.hackerearth.com/notes/disjoint-set-union-union-find/
+https://www.youtube.com/watch?v=ID00PMy0-vE
 
 """
 
 
-class DisjointSet:
-    def __init__(self, n):
-        self.arr = [x for x in range(n)]
-        self.size = None
+class Node:
+    def __init__(self, data=None):
+        self.rank = 0
+        self.parent = None
+        self.data = data
 
-    @classmethod
-    def size_init(cls, n):
-        obj = cls(n)
-        obj.size = [1 for x in range(n)]
-        return obj
+    def __eq__(self, other):
+        return self.data == other.data
 
-    def find(self, n):
-        if self.arr[n] == n:
-            return n
+    def __str__(self):
+        return str(self.parent.data)
+
+
+class DisjointSet(object):
+    def __init__(self):
+        self.set_dic = {}
+
+    @property
+    def set_dic(self):
+        return self.__set_dic
+
+    @set_dic.setter
+    def set_dic(self, value):
+        self.__set_dic = value
+
+    def make_set(self, data):
+        node = Node(data)
+        node.parent = node
+        self.set_dic[data] = node
+
+    def find_set(self, data):
+        node = self.set_dic[data]
+        if node.parent == node:
+            return node
         else:
-            return self.find(self.arr[n])
+            node.parent = self.find_set(node.parent.data)
+        return node.parent
 
-    def union(self, node1, node2):
-        root1 = self.find(node1)
-        root2 = self.find(node2)
-        if root1 == root2:
+    def union(self, data1, data2):
+        node1 = self.find_set(data1)
+        node2 = self.find_set(data2)
+
+        if node1 == node2:
             return
-        else:
-            self.arr[root1] = root2
-
-    def unionSize(self, node1, node2):
-        root1 = self.find(node1)
-        root2 = self.find(node2)
-        if root1 == root2:
-            return
-        elif self.size[root1] < self.size[root2]:
-            self.arr[root1] = self.arr[root2]
-            self.size[root2] += self.size[root1]
-        else:
-            self.arr[root2] = self.arr[root1]
-            self.size[root1] += self.size[root2]
+        elif node1.rank >= node2.rank:
+            node2.parent = node1
+            if node1.rank == node2.rank:
+                node1.rank += 1
+        elif node1.rank < node2.rank:
+            node1.parent = node2
 
 
 if __name__ == '__main__':
-    dsu = DisjointSet(6)
-    dsu.union(1, 0)
-    dsu.union(0, 2)
-    dsu.union(3, 4)
-    dsu.union(1, 4)
-    print dsu.arr
-    print '\n'
-    dsu1 = DisjointSet.size_init(6)
-    dsu1.unionSize(0, 1)
-    dsu1.unionSize(1, 2)
-    dsu1.unionSize(3, 2)
-    print dsu1.arr
-    print dsu1.size
+    ds = DisjointSet()
+    ds.make_set(1)
+    ds.make_set(2)
+    ds.make_set(3)
+    ds.make_set(4)
+    ds.make_set(5)
+    ds.make_set(6)
+    ds.make_set(7)
+
+    ds.union(1, 2)
+    ds.union(2, 3)
+    ds.union(4, 5)
+    ds.union(6, 7)
+    ds.union(5, 6)
+    ds.union(3, 7)
+
+    print ds.find_set(1)
+    print ds.find_set(2)
+    print ds.find_set(3)
+    print ds.find_set(4)
+    print ds.find_set(5)
+    print ds.find_set(6)
+    print ds.find_set(7)
