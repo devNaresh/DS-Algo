@@ -129,14 +129,12 @@ class HeapMap(object):
     def pop_min_element(self):
         min_element = self._heap_map_list[0]
         last_element = self._heap_map_list.pop()
-        self._heap_dic.pop(min_element, None)
+        element_value = self._heap_dic.pop(min_element, None)
         self._length -= 1
         if self._heap_map_list:
             self._heap_map_list[0] = last_element
             self.min_heapify(0, self._length)
-        else:
-            min_element = last_element
-        return min_element
+        return min_element, element_value
 
 
 if __name__ == '__main__':
